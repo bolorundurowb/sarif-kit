@@ -9,7 +9,7 @@ description: >-
 
 # Using SarifKit
 
-SarifKit is a zero-dependency, Native-AOT-ready C# library for SARIF 2.1.0. It targets `net8.0` and `net9.0`. Consuming code uses only `SarifKit.IO` and `SarifKit.Models`. `SarifKit.Serialization` and `SarifKit.Internal` are internal.
+SarifKit is a zero-dependency, Native-AOT-ready C# library for SARIF 2.1.0. It targets `net8.0`, `net9.0`, and `net10.0`. Consuming code uses only `SarifKit.IO` and `SarifKit.Models`. `SarifKit.Serialization` and `SarifKit.Internal` are internal.
 
 Read and write through `SarifReader` and `SarifWriter`. Do not call `JsonSerializer` on these types from a consumer. The source-generated context is internal, and a reflection serializer will not round-trip the model correctly under trimming or Native AOT.
 
