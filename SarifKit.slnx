@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="samples/SarifKit.Sample/SarifKit.Sample.csproj" />
+  <Project Path="src/SarifKit/SarifKit.csproj" />
+  <Project Path="tests/SarifKit.Benchmarks/SarifKit.Benchmarks.csproj">
+    <BuildType Project="Release" />
+  </Project>
+  <Project Path="tests/SarifKit.Tests/SarifKit.Tests.csproj" />
+</Solution>
