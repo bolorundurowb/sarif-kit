@@ -21,6 +21,18 @@ public sealed class ThreadFlow
     public Message? Message { get; init; }
 
     /// <summary>
+    /// Values of relevant expressions at the start of the thread flow that may change during thread flow execution.
+    /// </summary>
+    [JsonPropertyName("initialState")]
+    public IReadOnlyDictionary<string, MultiformatMessageString>? InitialState { get; init; }
+
+    /// <summary>
+    /// Values of relevant expressions at the start of the thread flow that remain constant.
+    /// </summary>
+    [JsonPropertyName("immutableState")]
+    public IReadOnlyDictionary<string, MultiformatMessageString>? ImmutableState { get; init; }
+
+    /// <summary>
     /// An array of threadFlowLocation objects, each of which describes a location visited by the tool.
     /// </summary>
     [JsonPropertyName("locations")]

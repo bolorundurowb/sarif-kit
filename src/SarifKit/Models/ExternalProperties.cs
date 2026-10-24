@@ -21,16 +21,34 @@ public sealed class ExternalProperties
     public string? Schema { get; init; }
 
     /// <summary>
-    /// A SARIF run object.
+    /// A stable, unique identifier for this external properties object, in the form of a GUID.
+    /// </summary>
+    [JsonPropertyName("guid")]
+    public string? Guid { get; init; }
+
+    /// <summary>
+    /// A stable, unique identifier for the run associated with this external properties object, in the form of a GUID.
     /// </summary>
     [JsonPropertyName("runGuid")]
     public string? RunGuid { get; init; }
 
     /// <summary>
-    /// Key/value pairs that provide additional information about the external properties.
+    /// A conversion object that will be merged with a separate run.
     /// </summary>
     [JsonPropertyName("conversion")]
-    public Tool? Conversion { get; init; }
+    public Conversion? Conversion { get; init; }
+
+    /// <summary>
+    /// An array of graph objects that will be merged with a separate run.
+    /// </summary>
+    [JsonPropertyName("graphs")]
+    public IReadOnlyList<Graph>? Graphs { get; init; }
+
+    /// <summary>
+    /// Key/value pairs that will be merged with a separate run.
+    /// </summary>
+    [JsonPropertyName("externalizedProperties")]
+    public IReadOnlyDictionary<string, JsonElement>? ExternalizedProperties { get; init; }
 
     /// <summary>
     /// A list of file objects representing the artifacts relevant to the run.
@@ -97,6 +115,18 @@ public sealed class ExternalProperties
     /// </summary>
     [JsonPropertyName("translations")]
     public IReadOnlyList<ToolComponent>? Translations { get; init; }
+
+    /// <summary>
+    /// Requests that will be merged with a separate run.
+    /// </summary>
+    [JsonPropertyName("webRequests")]
+    public IReadOnlyList<WebRequest>? WebRequests { get; init; }
+
+    /// <summary>
+    /// Responses that will be merged with a separate run.
+    /// </summary>
+    [JsonPropertyName("webResponses")]
+    public IReadOnlyList<WebResponse>? WebResponses { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the external properties.

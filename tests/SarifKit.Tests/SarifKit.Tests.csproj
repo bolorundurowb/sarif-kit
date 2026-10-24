@@ -18,4 +18,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SarifKit\SarifKit.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="TestData\*.sarif" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\samples\SarifKit.Sample\sample.sarif" Link="TestData\sample.sarif" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

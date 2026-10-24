@@ -15,16 +15,16 @@ public sealed class ReportingConfiguration
     public bool? Enabled { get; init; }
 
     /// <summary>
-    /// Specifies the default failure level for the report.
+    /// Specifies the failure level for the report.
     /// </summary>
-    [JsonPropertyName("defaultLevel")]
-    public FailureLevel? DefaultLevel { get; init; }
+    [JsonPropertyName("level")]
+    public FailureLevel? Level { get; init; }
 
     /// <summary>
-    /// Specifies the default rank for the report.
+    /// Specifies the relative priority of the report, from 0.0 to 100.0.
     /// </summary>
-    [JsonPropertyName("defaultRank")]
-    public double? DefaultRank { get; init; }
+    [JsonPropertyName("rank")]
+    public double? Rank { get; init; }
 
     /// <summary>
     /// Contains configuration information specific to a report.

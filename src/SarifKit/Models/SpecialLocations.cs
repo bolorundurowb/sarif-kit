@@ -9,10 +9,10 @@ namespace SarifKit.Models;
 public sealed class SpecialLocations
 {
     /// <summary>
-    /// Provides a location to display for this run if no other locations are available.
+    /// A location that is relevant to the run as a whole, which serves as the base for displaying artifact locations.
     /// </summary>
-    [JsonPropertyName("displayLocation")]
-    public Location? DisplayLocation { get; init; }
+    [JsonPropertyName("displayBase")]
+    public ArtifactLocation? DisplayBase { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the special locations.

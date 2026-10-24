@@ -4,21 +4,27 @@ using System.Text.Json.Serialization;
 namespace SarifKit.Models;
 
 /// <summary>
-/// A request to suppress a result.
+/// A suppression that is relevant to a result.
 /// </summary>
 public sealed class Suppression
 {
     /// <summary>
-    /// A string that indicates where the suppression is persisted.
+    /// A stable, unique identifier for the suppression in the form of a GUID.
     /// </summary>
-    [JsonPropertyName("kind")]
-    public required string Kind { get; init; }
+    [JsonPropertyName("guid")]
+    public string? Guid { get; init; }
 
     /// <summary>
-    /// A string that indicates the status of the suppression.
+    /// A value that indicates where the suppression is persisted.
+    /// </summary>
+    [JsonPropertyName("kind")]
+    public required SuppressionKind Kind { get; init; }
+
+    /// <summary>
+    /// A value that indicates the review status of the suppression.
     /// </summary>
     [JsonPropertyName("status")]
-    public string? Status { get; init; }
+    public SuppressionStatus? Status { get; init; }
 
     /// <summary>
     /// A string representing the justification for the suppression.
@@ -31,12 +37,6 @@ public sealed class Suppression
     /// </summary>
     [JsonPropertyName("location")]
     public Location? Location { get; init; }
-
-    /// <summary>
-    /// A string that indicates the identity and version of the tool that created the suppression.
-    /// </summary>
-    [JsonPropertyName("guid")]
-    public string? Guid { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the suppression.

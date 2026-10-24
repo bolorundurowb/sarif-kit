@@ -9,7 +9,7 @@ namespace SarifKit.Models;
 public sealed class WebResponse
 {
     /// <summary>
-    /// The index within the run artifacts array of the request artifact.
+    /// The index within the run.webResponses array of the response object associated with this result.
     /// </summary>
     [JsonPropertyName("index")]
     public int? Index { get; init; }
@@ -51,10 +51,10 @@ public sealed class WebResponse
     public ArtifactContent? Body { get; init; }
 
     /// <summary>
-    /// The MIME type of the response body.
+    /// Specifies whether a response was received from the server.
     /// </summary>
-    [JsonPropertyName("bodyMimeType")]
-    public string? BodyMimeType { get; init; }
+    [JsonPropertyName("noResponseReceived")]
+    public bool? NoResponseReceived { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the response.

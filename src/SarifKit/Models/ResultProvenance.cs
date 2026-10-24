@@ -39,10 +39,11 @@ public sealed class ResultProvenance
     public string? LastDetectionRunGuid { get; init; }
 
     /// <summary>
-    /// A non-negative integer specifying the number of times this result has been detected.
+    /// An array of physicalLocation objects which specify the portions of an analysis tool's output that a converter
+    /// transformed into the result.
     /// </summary>
-    [JsonPropertyName("detectionCount")]
-    public int? DetectionCount { get; init; }
+    [JsonPropertyName("conversionSources")]
+    public IReadOnlyList<PhysicalLocation>? ConversionSources { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the result provenance.

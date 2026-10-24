@@ -21,6 +21,12 @@ public sealed class Address
     public long? RelativeAddress { get; init; }
 
     /// <summary>
+    /// The number of bytes in this range of addresses.
+    /// </summary>
+    [JsonPropertyName("length")]
+    public long? Length { get; init; }
+
+    /// <summary>
     /// The index within the run addresses array of the parent address.
     /// </summary>
     [JsonPropertyName("parentIndex")]

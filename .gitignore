@@ -428,3 +428,6 @@ FodyWeavers.xsd
 #*.lscache
 
 .idea/
+
+# Output written by the sample app
+samples/SarifKit.Sample/out.sarif

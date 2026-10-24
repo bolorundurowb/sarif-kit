@@ -30,7 +30,7 @@ public sealed class Node
     /// Array of child nodes.
     /// </summary>
     [JsonPropertyName("children")]
-    public IReadOnlyList<string>? Children { get; init; }
+    public IReadOnlyList<Node>? Children { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the node.

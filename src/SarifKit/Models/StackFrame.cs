@@ -27,30 +27,6 @@ public sealed class StackFrame
     public int? ThreadId { get; init; }
 
     /// <summary>
-    /// The address of the method or function that is executing.
-    /// </summary>
-    [JsonPropertyName("address")]
-    public Address? Address { get; init; }
-
-    /// <summary>
-    /// The fully qualified name of the method or function that is executing.
-    /// </summary>
-    [JsonPropertyName("fullyQualifiedLogicalName")]
-    public string? FullyQualifiedLogicalName { get; init; }
-
-    /// <summary>
-    /// A logical location index that identifies the method or function that is executing.
-    /// </summary>
-    [JsonPropertyName("logicalLocationIndex")]
-    public int? LogicalLocationIndex { get; init; }
-
-    /// <summary>
-    /// A message relevant to this stack frame.
-    /// </summary>
-    [JsonPropertyName("message")]
-    public Message? Message { get; init; }
-
-    /// <summary>
     /// The parameters of the call that is executing.
     /// </summary>
     [JsonPropertyName("parameters")]

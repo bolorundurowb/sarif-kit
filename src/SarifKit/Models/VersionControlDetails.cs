@@ -29,14 +29,20 @@ public sealed class VersionControlDetails
     /// <summary>
     /// A tag that has been applied to the revision.
     /// </summary>
-    [JsonPropertyName("tag")]
-    public string? Tag { get; init; }
+    [JsonPropertyName("revisionTag")]
+    public string? RevisionTag { get; init; }
 
     /// <summary>
-    /// Coordinates of the altered spanned by the result.
+    /// The time at which the repository was in the state described by this object.
     /// </summary>
-    [JsonPropertyName("asOfKPIs")]
-    public string? AsOfTimeUtc { get; init; }
+    [JsonPropertyName("asOfTimeUtc")]
+    public DateTimeOffset? AsOfTimeUtc { get; init; }
+
+    /// <summary>
+    /// The location in the local file system to which the root of the repository was mapped at the time of the analysis.
+    /// </summary>
+    [JsonPropertyName("mappedTo")]
+    public ArtifactLocation? MappedTo { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the version control details.

@@ -9,6 +9,12 @@ namespace SarifKit.Models;
 public sealed class Artifact
 {
     /// <summary>
+    /// A short description of the artifact.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public Message? Description { get; init; }
+
+    /// <summary>
     /// The location of the artifact.
     /// </summary>
     [JsonPropertyName("location")]

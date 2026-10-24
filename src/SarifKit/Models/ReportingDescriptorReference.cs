@@ -15,6 +15,12 @@ public sealed class ReportingDescriptorReference
     public string? Id { get; init; }
 
     /// <summary>
+    /// The index into an array of descriptors in the tool component referenced by <see cref="ToolComponent"/>.
+    /// </summary>
+    [JsonPropertyName("index")]
+    public int? Index { get; init; }
+
+    /// <summary>
     /// The GUID of the report.
     /// </summary>
     [JsonPropertyName("guid")]

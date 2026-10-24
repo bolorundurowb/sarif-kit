@@ -9,7 +9,13 @@ namespace SarifKit.Models;
 public sealed class WebRequest
 {
     /// <summary>
-    /// The request protocol and version.
+    /// The index within the run.webRequests array of the request object associated with this result.
+    /// </summary>
+    [JsonPropertyName("index")]
+    public int? Index { get; init; }
+
+    /// <summary>
+    /// The request protocol.
     /// </summary>
     [JsonPropertyName("protocol")]
     public string? Protocol { get; init; }
@@ -49,12 +55,6 @@ public sealed class WebRequest
     /// </summary>
     [JsonPropertyName("body")]
     public ArtifactContent? Body { get; init; }
-
-    /// <summary>
-    /// The MIME type of the request body.
-    /// </summary>
-    [JsonPropertyName("bodyMimeType")]
-    public string? BodyMimeType { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the request.

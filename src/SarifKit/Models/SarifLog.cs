@@ -18,16 +18,26 @@ public sealed class SarifLog
     /// The SARIF version of this log file.
     /// </summary>
     [JsonPropertyName("version")]
-    public required string Version { get; init; } = "2.1.0";
+    public string Version { get; init; } = "2.1.0";
 
     /// <summary>
     /// The set of runs contained in this log file.
     /// </summary>
+    /// <remarks>
+    /// SARIF 2.1.0 (§3.13.4) permits <c>"runs": null</c> when the tool failed to start. That value is read as an
+    /// empty list, so this property is never <see langword="null"/>.
+    /// </remarks>
     [JsonPropertyName("runs")]
-    public required IReadOnlyList<SarifRun> Runs { get; init; }
+    public required IReadOnlyList<SarifRun> Runs
+    {
+        get => _runs;
+        init => _runs = value ?? [];
+    }
+
+    private readonly IReadOnlyList<SarifRun> _runs = [];
 
     /// <summary>
-   /// References to external property files that share data between runs.
+    /// References to external property files that share data between runs.
     /// </summary>
     [JsonPropertyName("inlineExternalProperties")]
     public IReadOnlyList<ExternalProperties>? InlineExternalProperties { get; init; }

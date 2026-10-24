@@ -9,64 +9,83 @@ namespace SarifKit.Models;
 public sealed class ThreadFlowLocation
 {
     /// <summary>
-    /// A numeric value that can be used to sort thread flow locations in chronological order.
-    /// </summary>
-    [JsonPropertyName("executionOrder")]
-    public int? ExecutionOrder { get; init; }
-
-    /// <summary>
-    /// Coordinates of the location within the thread flow.
-    /// </summary>
-    [JsonPropertyName("executionTimeUtc")]
-    public DateTimeOffset? ExecutionTimeUtc { get; init; }
-
-    /// <summary>
-    /// The importance of this location in understanding the code flow.
-    /// </summary>
-    [JsonPropertyName("importance")]
-    public Importance? Importance { get; init; }
-
-    /// <summary>
     /// The index within the run threadFlowLocations array for this threadFlowLocation.
     /// </summary>
     [JsonPropertyName("index")]
     public int? Index { get; init; }
 
     /// <summary>
-    /// A code location in the thread flow.
+    /// The code location.
     /// </summary>
     [JsonPropertyName("location")]
     public Location? Location { get; init; }
 
     /// <summary>
-    /// The reason for the location.
+    /// The call stack leading to this location.
+    /// </summary>
+    [JsonPropertyName("stack")]
+    public Stack? Stack { get; init; }
+
+    /// <summary>
+    /// A set of distinct strings that categorize the thread flow location.
     /// </summary>
     [JsonPropertyName("kinds")]
     public IReadOnlyList<string>? Kinds { get; init; }
 
     /// <summary>
-    /// A set of statements in the code that this location is associated with.
+    /// An array of references to rule or taxonomy reporting descriptors that are applicable to the thread flow location.
+    /// </summary>
+    [JsonPropertyName("taxa")]
+    public IReadOnlyList<ReportingDescriptorReference>? Taxa { get; init; }
+
+    /// <summary>
+    /// The name of the module that contains the code that is executing.
     /// </summary>
     [JsonPropertyName("module")]
     public string? Module { get; init; }
 
     /// <summary>
-    /// The call to the current module from the previous module.
+    /// A dictionary, each of whose keys specifies a variable or expression, the associated value of which represents
+    /// the variable or expression value.
+    /// </summary>
+    [JsonPropertyName("state")]
+    public IReadOnlyDictionary<string, MultiformatMessageString>? State { get; init; }
+
+    /// <summary>
+    /// An integer representing a containment hierarchy within the thread flow.
     /// </summary>
     [JsonPropertyName("nestingLevel")]
     public int? NestingLevel { get; init; }
 
     /// <summary>
-    /// The address of the location.
+    /// An integer representing the temporal order in which execution reached this location.
     /// </summary>
-    [JsonPropertyName("address")]
-    public Address? Address { get; init; }
+    [JsonPropertyName("executionOrder")]
+    public int? ExecutionOrder { get; init; }
 
     /// <summary>
-    /// A stack associated with the location.
+    /// The time at which this location was executed.
     /// </summary>
-    [JsonPropertyName("stack")]
-    public Stack? Stack { get; init; }
+    [JsonPropertyName("executionTimeUtc")]
+    public DateTimeOffset? ExecutionTimeUtc { get; init; }
+
+    /// <summary>
+    /// Specifies the importance of this location in understanding the code flow in which it occurs.
+    /// </summary>
+    [JsonPropertyName("importance")]
+    public Importance? Importance { get; init; }
+
+    /// <summary>
+    /// A web request associated with this thread flow location.
+    /// </summary>
+    [JsonPropertyName("webRequest")]
+    public WebRequest? WebRequest { get; init; }
+
+    /// <summary>
+    /// A web response associated with this thread flow location.
+    /// </summary>
+    [JsonPropertyName("webResponse")]
+    public WebResponse? WebResponse { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the thread flow location.

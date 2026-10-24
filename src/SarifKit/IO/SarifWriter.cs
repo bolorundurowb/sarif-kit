@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using SarifKit.Internal;
 using SarifKit.Models;
 using SarifKit.Serialization;
@@ -11,30 +12,21 @@ namespace SarifKit.IO;
 /// </summary>
 public static class SarifWriter
 {
+    private static readonly SarifJsonContext CompactContext =
+        new(new JsonSerializerOptions(SarifJsonContext.Default.Options) { WriteIndented = false });
+
     /// <summary>
     /// Writes the specified <see cref="SarifLog"/> to the destination stream.
     /// </summary>
     /// <param name="log">The SARIF log to write.</param>
     /// <param name="destination">The stream to which the SARIF JSON data is written.</param>
     /// <param name="indented">Whether the output JSON should be indented.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-    public static void Write(
-        SarifLog log,
-        Stream destination,
-        bool indented = true,
-        CancellationToken cancellationToken = default)
+    public static void Write(SarifLog log, Stream destination, bool indented = true)
     {
         ArgumentNullException.ThrowIfNull(log);
         ArgumentNullException.ThrowIfNull(destination);
 
-        cancellationToken.ThrowIfCancellationRequested();
-
-        using var writer = new Utf8JsonWriter(destination, new JsonWriterOptions
-        {
-            Indented = indented,
-            SkipValidation = false
-        });
-
+        using var writer = new Utf8JsonWriter(destination, new JsonWriterOptions { Indented = indented });
         JsonSerializer.Serialize(writer, log, SarifJsonContext.Default.SarifLog);
     }
 
@@ -49,8 +41,7 @@ public static class SarifWriter
         ArgumentNullException.ThrowIfNull(log);
 
         using var buffer = new PooledByteBufferWriter();
-        using var writer = new Utf8JsonWriter(buffer, new JsonWriterOptions { Indented = indented });
-        JsonSerializer.Serialize(writer, log, SarifJsonContext.Default.SarifLog);
+        SerializeToBuffer(log, buffer, indented);
         return Encoding.UTF8.GetString(buffer.WrittenSpan);
     }
 
@@ -65,8 +56,7 @@ public static class SarifWriter
         ArgumentNullException.ThrowIfNull(log);
 
         using var buffer = new PooledByteBufferWriter();
-        using var writer = new Utf8JsonWriter(buffer, new JsonWriterOptions { Indented = indented });
-        JsonSerializer.Serialize(writer, log, SarifJsonContext.Default.SarifLog);
+        SerializeToBuffer(log, buffer, indented);
         return buffer.WrittenSpan.ToArray();
     }
 
@@ -78,7 +68,7 @@ public static class SarifWriter
     /// <param name="indented">Whether the output JSON should be indented.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous write operation.</returns>
-    public static async Task WriteAsync(
+    public static Task WriteAsync(
         SarifLog log,
         Stream destination,
         bool indented = true,
@@ -87,10 +77,13 @@ public static class SarifWriter
         ArgumentNullException.ThrowIfNull(log);
         ArgumentNullException.ThrowIfNull(destination);
 
-        cancellationToken.ThrowIfCancellationRequested();
+        JsonTypeInfo<SarifLog> typeInfo = indented ? SarifJsonContext.Default.SarifLog : CompactContext.SarifLog;
+        return JsonSerializer.SerializeAsync(destination, log, typeInfo, cancellationToken);
+    }
 
-        // For async writing, serialize to a pooled buffer first to avoid sync-over-async in Utf8JsonWriter.
-        byte[] bytes = WriteToUtf8Bytes(log, indented);
-        await destination.WriteAsync(bytes.AsMemory(0, bytes.Length), cancellationToken).ConfigureAwait(false);
+    private static void SerializeToBuffer(SarifLog log, PooledByteBufferWriter buffer, bool indented)
+    {
+        using var writer = new Utf8JsonWriter(buffer, new JsonWriterOptions { Indented = indented });
+        JsonSerializer.Serialize(writer, log, SarifJsonContext.Default.SarifLog);
     }
 }

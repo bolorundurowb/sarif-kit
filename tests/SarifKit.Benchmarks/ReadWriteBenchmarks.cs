@@ -1,4 +1,3 @@
-using System.Text;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using SarifKit.IO;
@@ -9,17 +8,18 @@ namespace SarifKit.Benchmarks;
 [MemoryDiagnoser]
 public class ReadWriteBenchmarks
 {
+    private const int ResultCount = 50_000;
+    private const int MinimumPayloadBytes = 10 * 1024 * 1024;
+
     private byte[] _sarifBytes = [];
-    private string _sarifString = "";
-    private string _sarifFilePath = "";
     private SarifKit.Models.SarifLog _kitLog = null!;
+    private Sdk.SarifLog _sdkLog = null!;
 
     [GlobalSetup]
     public void Setup()
     {
-        const int resultCount = 15_000;
-        var results = new List<SarifKit.Models.Result>(resultCount);
-        for (int i = 0; i < resultCount; i++)
+        var results = new List<SarifKit.Models.Result>(ResultCount);
+        for (int i = 0; i < ResultCount; i++)
         {
             results.Add(new SarifKit.Models.Result
             {
@@ -32,7 +32,7 @@ public class ReadWriteBenchmarks
                         PhysicalLocation = new SarifKit.Models.PhysicalLocation
                         {
                             ArtifactLocation = new SarifKit.Models.ArtifactLocation { Uri = $"file:///src/component/folder/file{i:D5}.cs" },
-                            Region = new SarifKit.Models.Region { StartLine = i, StartColumn = 1, EndColumn = 80 }
+                            Region = new SarifKit.Models.Region { StartLine = i + 1, StartColumn = 1, EndColumn = 80 }
                         }
                     }
                 ]
@@ -69,52 +69,49 @@ public class ReadWriteBenchmarks
         };
 
         _sarifBytes = SarifWriter.WriteToUtf8Bytes(_kitLog, indented: false);
-        _sarifString = Encoding.UTF8.GetString(_sarifBytes);
-        _sarifFilePath = Path.Combine(Path.GetTempPath(), $"sarifkit-benchmark-{Guid.NewGuid()}.sarif");
-        File.WriteAllText(_sarifFilePath, _sarifString);
-    }
-
-    [GlobalCleanup]
-    public void Cleanup()
-    {
-        if (File.Exists(_sarifFilePath))
+        if (_sarifBytes.Length < MinimumPayloadBytes)
         {
-            File.Delete(_sarifFilePath);
+            throw new InvalidOperationException(
+                $"Benchmark payload is {_sarifBytes.Length:N0} bytes; expected at least {MinimumPayloadBytes:N0}.");
         }
+
+        using var sdkSource = new MemoryStream(_sarifBytes, writable: false);
+        _sdkLog = Sdk.SarifLog.Load(sdkSource);
     }
 
     [Benchmark(Baseline = true)]
     public Sdk.SarifLog Read_SarifSdk()
     {
-        return Sdk.SarifLog.Load(_sarifFilePath);
+        using var source = new MemoryStream(_sarifBytes, writable: false);
+        return Sdk.SarifLog.Load(source);
     }
 
     [Benchmark]
     public SarifKit.Models.SarifLog Read_SarifKit()
     {
-        return SarifReader.Read(_sarifBytes);
+        using var source = new MemoryStream(_sarifBytes, writable: false);
+        return SarifReader.Read(source);
     }
 
     [Benchmark]
     public void Write_SarifSdk()
     {
-        var sdkLog = Sdk.SarifLog.Load(_sarifFilePath);
-        using var ms = new MemoryStream();
-        sdkLog.Save(ms);
+        using var destination = new MemoryStream();
+        _sdkLog.Save(destination);
     }
 
     [Benchmark]
     public void Write_SarifKit()
     {
-        using var ms = new MemoryStream();
-        SarifWriter.Write(_kitLog, ms, indented: false);
+        using var destination = new MemoryStream();
+        SarifWriter.Write(_kitLog, destination, indented: false);
     }
 
     [Benchmark]
     public void Buffer_PooledByteBufferWriter()
     {
         using var writer = new SarifKit.Internal.PooledByteBufferWriter();
-        writer.GetSpan(_sarifBytes.Length).Fill(0);
+        _sarifBytes.CopyTo(writer.GetSpan(_sarifBytes.Length));
         writer.Advance(_sarifBytes.Length);
         _ = writer.WrittenSpan.ToArray();
     }

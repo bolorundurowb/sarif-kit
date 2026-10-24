@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>SarifKit</AssemblyName>
     <RootNamespace>SarifKit</RootNamespace>
 
@@ -15,18 +12,15 @@
     <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
     <IsTrimmable>true</IsTrimmable>
 
-    <!-- Performance -->
     <Optimize>true</Optimize>
-    <TieredPGO>true</TieredPGO>
-    <InvariantGlobalization>true</InvariantGlobalization>
 
     <!-- Packaging -->
     <PackageId>SarifKit</PackageId>
-    <Version>0.1.0</Version>
-    <Authors>SarifKit Contributors</Authors>
+    <Version>1.0.0</Version>
+    <Authors>Winner-Timothy Bolorunduro</Authors>
     <Description>Zero-dependency, Native-AOT-ready reader/writer for SARIF 2.1.0.</Description>
     <PackageTags>sarif;static-analysis;json;aot;performance</PackageTags>
-    <RepositoryUrl>https://github.com/sarifkit/SarifKit</RepositoryUrl>
+    <RepositoryUrl>https://github.com/bolorundurowb/sarif-kit</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -35,9 +29,6 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-
-    <!-- No external dependencies -->
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
   </PropertyGroup>
 
   <ItemGroup>

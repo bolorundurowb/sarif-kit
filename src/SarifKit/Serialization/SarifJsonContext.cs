@@ -62,14 +62,20 @@ namespace SarifKit.Serialization;
 [JsonSerializable(typeof(ExternalPropertyFileReference))]
 [JsonSerializable(typeof(ResultProvenance))]
 [JsonSerializable(typeof(Suppression))]
+[JsonSerializable(typeof(SuppressionKind))]
+[JsonSerializable(typeof(SuppressionStatus))]
 [JsonSerializable(typeof(RunAutomationDetails))]
-[JsonSerializable(typeof(AutomationDetails))]
 [JsonSerializable(typeof(VersionControlDetails))]
 [JsonSerializable(typeof(TranslationMetadata))]
+[JsonSerializable(typeof(Conversion))]
+[JsonSerializable(typeof(Attachment))]
+[JsonSerializable(typeof(Rectangle))]
+[JsonSerializable(typeof(ConfigurationOverride))]
 [JsonSerializable(typeof(JsonElement))]
 [JsonSerializable(typeof(IReadOnlyDictionary<string, JsonElement>))]
 [JsonSerializable(typeof(IReadOnlyDictionary<string, string>))]
 [JsonSerializable(typeof(IReadOnlyDictionary<string, MultiformatMessageString>))]
+[JsonSerializable(typeof(IReadOnlyDictionary<string, ArtifactLocation>))]
 internal sealed partial class SarifJsonContext : JsonSerializerContext
 {
 }

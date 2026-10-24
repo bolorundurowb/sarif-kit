@@ -15,16 +15,34 @@ public sealed class ReportingDescriptor
     public required string Id { get; init; }
 
     /// <summary>
+    /// An array of stable, opaque identifiers by which this report was known in some previous version of the analysis tool.
+    /// </summary>
+    [JsonPropertyName("deprecatedIds")]
+    public IReadOnlyList<string>? DeprecatedIds { get; init; }
+
+    /// <summary>
     /// A unique identifier for the reporting descriptor in the form of a GUID.
     /// </summary>
     [JsonPropertyName("guid")]
     public string? Guid { get; init; }
 
     /// <summary>
+    /// An array of unique identifiers in the form of a GUID by which this report was known in some previous version of the analysis tool.
+    /// </summary>
+    [JsonPropertyName("deprecatedGuids")]
+    public IReadOnlyList<string>? DeprecatedGuids { get; init; }
+
+    /// <summary>
     /// A report identifier that is understandable to an end user.
     /// </summary>
     [JsonPropertyName("name")]
     public string? Name { get; init; }
+
+    /// <summary>
+    /// An array of readable identifiers by which this report was known in some previous version of the analysis tool.
+    /// </summary>
+    [JsonPropertyName("deprecatedNames")]
+    public IReadOnlyList<string>? DeprecatedNames { get; init; }
 
     /// <summary>
     /// A concise description of the report.
@@ -55,12 +73,6 @@ public sealed class ReportingDescriptor
     /// </summary>
     [JsonPropertyName("help")]
     public MultiformatMessageString? Help { get; init; }
-
-    /// <summary>
-    /// An array of strings that contain any number of hierarchical tags.
-    /// </summary>
-    [JsonPropertyName("taxa")]
-    public IReadOnlyList<ReportingDescriptorReference>? Taxa { get; init; }
 
     /// <summary>
     /// A description of the relationship between the current reporting descriptor and a related reporting descriptor.

@@ -15,12 +15,6 @@ public sealed class EdgeTraversal
     public required string EdgeId { get; init; }
 
     /// <summary>
-    /// The index in the graph.edges array of the edge object associated with this edge traversal.
-    /// </summary>
-    [JsonPropertyName("edgeIndex")]
-    public int? EdgeIndex { get; init; }
-
-    /// <summary>
     /// A description of the edge traversal.
     /// </summary>
     [JsonPropertyName("message")]

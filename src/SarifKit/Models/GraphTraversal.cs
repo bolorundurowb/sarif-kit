@@ -15,22 +15,22 @@ public sealed class GraphTraversal
     public Message? Description { get; init; }
 
     /// <summary>
-    /// The index within the result.graphs array of the graph object that this object traverses.
+    /// The index within the run.graphs array of the graph object that this object traverses.
     /// </summary>
-    [JsonPropertyName("graphId")]
-    public string? GraphId { get; init; }
+    [JsonPropertyName("runGraphIndex")]
+    public int? RunGraphIndex { get; init; }
 
     /// <summary>
-    /// A description of the graph traversal.
+    /// The index within the result.graphs array of the graph object that this object traverses.
     /// </summary>
-    [JsonPropertyName("graphIndex")]
-    public int? GraphIndex { get; init; }
+    [JsonPropertyName("resultGraphIndex")]
+    public int? ResultGraphIndex { get; init; }
 
     /// <summary>
     /// The sequences of edges traversed in this graph traversal.
     /// </summary>
     [JsonPropertyName("edgeTraversals")]
-    public required IReadOnlyList<EdgeTraversal> EdgeTraversals { get; init; }
+    public IReadOnlyList<EdgeTraversal>? EdgeTraversals { get; init; }
 
     /// <summary>
     /// Values of relevant expressions at the start of the graph traversal that may change during graph traversal.

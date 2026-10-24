@@ -15,16 +15,22 @@ public sealed class ExternalPropertyFileReferences
     public ExternalPropertyFileReference? Conversion { get; init; }
 
     /// <summary>
-    /// An array of external property files containing run.files.
-    /// </summary>
-    [JsonPropertyName("files")]
-    public IReadOnlyList<ExternalPropertyFileReference>? Files { get; init; }
-
-    /// <summary>
-    /// An external property file containing run.graphs.
+    /// An array of external property files containing a run.graphs object.
     /// </summary>
     [JsonPropertyName("graphs")]
-    public ExternalPropertyFileReference? Graphs { get; init; }
+    public IReadOnlyList<ExternalPropertyFileReference>? Graphs { get; init; }
+
+    /// <summary>
+    /// An external property file containing a run.properties object.
+    /// </summary>
+    [JsonPropertyName("externalizedProperties")]
+    public ExternalPropertyFileReference? ExternalizedProperties { get; init; }
+
+    /// <summary>
+    /// An array of external property files containing run.artifacts.
+    /// </summary>
+    [JsonPropertyName("artifacts")]
+    public IReadOnlyList<ExternalPropertyFileReference>? Artifacts { get; init; }
 
     /// <summary>
     /// An array of external property files containing run.invocations.
@@ -33,16 +39,16 @@ public sealed class ExternalPropertyFileReferences
     public IReadOnlyList<ExternalPropertyFileReference>? Invocations { get; init; }
 
     /// <summary>
-    /// An external property file containing run.logicalLocations.
+    /// An array of external property files containing run.logicalLocations.
     /// </summary>
     [JsonPropertyName("logicalLocations")]
-    public ExternalPropertyFileReference? LogicalLocations { get; init; }
+    public IReadOnlyList<ExternalPropertyFileReference>? LogicalLocations { get; init; }
 
     /// <summary>
-    /// An external property file containing run.threadFlowLocations.
+    /// An array of external property files containing run.threadFlowLocations.
     /// </summary>
     [JsonPropertyName("threadFlowLocations")]
-    public ExternalPropertyFileReference? ThreadFlowLocations { get; init; }
+    public IReadOnlyList<ExternalPropertyFileReference>? ThreadFlowLocations { get; init; }
 
     /// <summary>
     /// An array of external property files containing run.results.
@@ -63,7 +69,7 @@ public sealed class ExternalPropertyFileReferences
     public IReadOnlyList<ExternalPropertyFileReference>? Addresses { get; init; }
 
     /// <summary>
-    /// An external property file containing run.driver and run.extensions.
+    /// An external property file containing a run.driver object.
     /// </summary>
     [JsonPropertyName("driver")]
     public ExternalPropertyFileReference? Driver { get; init; }
@@ -85,6 +91,18 @@ public sealed class ExternalPropertyFileReferences
     /// </summary>
     [JsonPropertyName("translations")]
     public IReadOnlyList<ExternalPropertyFileReference>? Translations { get; init; }
+
+    /// <summary>
+    /// An array of external property files containing run.requests.
+    /// </summary>
+    [JsonPropertyName("webRequests")]
+    public IReadOnlyList<ExternalPropertyFileReference>? WebRequests { get; init; }
+
+    /// <summary>
+    /// An array of external property files containing run.responses.
+    /// </summary>
+    [JsonPropertyName("webResponses")]
+    public IReadOnlyList<ExternalPropertyFileReference>? WebResponses { get; init; }
 
     /// <summary>
     /// Key/value pairs that provide additional information about the external property file references.

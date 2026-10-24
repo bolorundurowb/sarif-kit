@@ -1,6 +1,7 @@
 using System.Text.Json;
 using SarifKit.IO;
 using SarifKit.Models;
+using SarifKit.Serialization;
 using Xunit;
 
 namespace SarifKit.Tests;
@@ -160,5 +161,71 @@ public sealed class EdgeCaseTests
         var json = SarifWriter.WriteToString(log);
         Assert.Contains("\"level\": \"warning\"", json);
         Assert.Contains("\"kind\": \"fail\"", json);
+    }
+
+    [Fact]
+    public void MissingRequiredMember_Throws()
+    {
+        var json = """
+            {
+              "version": "2.1.0",
+              "runs": [
+                {
+                  "tool": { "driver": { "name": "tool" } },
+                  "results": [ { "ruleId": "RULE001" } ]
+                }
+              ]
+            }
+            """;
+
+        Assert.Throws<JsonException>(() => SarifReader.Read(json));
+    }
+
+    [Fact]
+    public void NullRuns_AreReadAsEmpty()
+    {
+        var log = SarifReader.Read("""{"version":"2.1.0","runs":null}""");
+
+        Assert.NotNull(log.Runs);
+        Assert.Empty(log.Runs);
+    }
+
+    [Theory]
+    [InlineData(ColumnKind.Utf16CodeUnits, "utf16CodeUnits")]
+    [InlineData(ColumnKind.UnicodeCodePoints, "unicodeCodePoints")]
+    [InlineData(ResultKind.NotApplicable, "notApplicable")]
+    [InlineData(SuppressionKind.InSource, "inSource")]
+    [InlineData(SuppressionStatus.UnderReview, "underReview")]
+    [InlineData(FailureLevel.None, "none")]
+    [InlineData(BaselineState.Unchanged, "unchanged")]
+    [InlineData(Importance.Essential, "essential")]
+    public void EnumValue_UsesSarifName(object value, string expectedName)
+    {
+        var json = JsonSerializer.Serialize(value, value.GetType(), SarifJsonContext.Default);
+
+        Assert.Equal($"\"{expectedName}\"", json);
+        Assert.Equal(value, JsonSerializer.Deserialize(json, value.GetType(), SarifJsonContext.Default));
+    }
+
+    [Fact]
+    public void EnumValue_IsReadCaseInsensitively()
+    {
+        var level = JsonSerializer.Deserialize("\"WARNING\"", SarifJsonContext.Default.FailureLevel);
+
+        Assert.Equal(FailureLevel.Warning, level);
+    }
+
+    [Theory]
+    [InlineData("\"critical\"")]
+    [InlineData("2")]
+    public void EnumValue_Unknown_Throws(string json)
+    {
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize(json, SarifJsonContext.Default.FailureLevel));
+    }
+
+    [Fact]
+    public void EnumValue_Undefined_ThrowsOnWrite()
+    {
+        Assert.Throws<JsonException>(() => JsonSerializer.Serialize((FailureLevel)42, SarifJsonContext.Default.FailureLevel));
     }
 }

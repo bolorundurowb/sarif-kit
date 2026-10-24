@@ -1,5 +1,5 @@
 using System.Text;
-using System.Text.Json;
+using System.Text.Json.Nodes;
 using SarifKit.IO;
 using SarifKit.Models;
 using Xunit;
@@ -166,6 +166,59 @@ public sealed class RoundTripTests
     }
 
     [Fact]
+    public void RoundTrip_PopulatedLog_ProducesIdenticalJson()
+    {
+        var firstWrite = SarifWriter.WriteToString(MakeLog());
+        var secondWrite = SarifWriter.WriteToString(SarifReader.Read(firstWrite));
+
+        Assert.Equal(firstWrite, secondWrite);
+    }
+
+    [Theory]
+    [InlineData("sample.sarif")]
+    [InlineData("full.sarif")]
+    public void RoundTrip_TestDataFile_PreservesEveryMember(string fileName)
+    {
+        var original = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "TestData", fileName));
+
+        var firstWrite = SarifWriter.WriteToString(SarifReader.Read(original));
+        var secondWrite = SarifWriter.WriteToString(SarifReader.Read(firstWrite));
+
+        Assert.Equal(firstWrite, secondWrite);
+        Assert.True(
+            JsonNode.DeepEquals(JsonNode.Parse(original), JsonNode.Parse(firstWrite)),
+            $"Written JSON differs from {fileName}, so a member was dropped or renamed:{Environment.NewLine}{firstWrite}");
+    }
+
+    [Fact]
+    public async Task RoundTrip_AsyncApi()
+    {
+        var original = MakeLog();
+        using var ms = new MemoryStream();
+        await SarifWriter.WriteAsync(original, ms);
+        ms.Position = 0;
+
+        var roundTripped = await SarifReader.ReadAsync(ms);
+
+        Assert.Equal(SarifWriter.WriteToString(original), SarifWriter.WriteToString(roundTripped));
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task WriteAsync_HonoursIndentation(bool indented)
+    {
+        using var ms = new MemoryStream();
+        await SarifWriter.WriteAsync(MakeLog(), ms, indented);
+
+        var json = Encoding.UTF8.GetString(ms.ToArray());
+
+        Assert.Equal(SarifWriter.WriteToString(MakeLog(), indented), json);
+        Assert.Equal(indented, json.Contains('\n'));
+    }
+
+    [Fact]
+    [Trait("Category", "Performance")]
     public void RoundTrip_LargeLog_UnderTwoSeconds()
     {
         const int count = 50_000;
