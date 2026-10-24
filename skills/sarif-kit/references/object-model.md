@@ -14,7 +14,7 @@ Types live in `SarifKit.Models`. JSON names match SARIF 2.1.0. Properties are in
 - `Tool`: `driver`, `extensions`.
 - `ToolComponent`: `name`, plus identity and version fields, `rules`, `notifications`, `taxa`, `contents`, `supportedTaxonomies`.
 - `ReportingDescriptor`: `id`, descriptions, `defaultConfiguration`, `help`, `helpUri`, `relationships`.
-- `ReportingConfiguration`: default `level`, `rank`, `enabled`, and related rule settings.
+- `ReportingConfiguration`: `enabled`, `level`, `rank`, `parameters`.
 - `MultiformatMessageString`: `text` and optional `markdown`.
 - `Invocation`: `executionSuccessful`, `commandLine`, `arguments`, `startTimeUtc`, `endTimeUtc`, `exitCode`, `toolExecutionNotifications`, `ruleConfigurationOverrides`, `notificationConfigurationOverrides`.
 
@@ -34,7 +34,7 @@ A result's `ruleId` is the descriptor `id`. `ruleIndex` is the index of that des
 - `PhysicalLocation`: `artifactLocation`, `region`, `contextRegion`, `address`.
 - `ArtifactLocation`: `uri`, `uriBaseId`, `index`. Resolve `uriBaseId` through `SarifRun.OriginalUriBaseIds`. Resolve `index` through `SarifRun.Artifacts`.
 - `Region`: `startLine`, `startColumn`, `endLine`, `endColumn`, `charOffset`, `charLength`, `byteOffset`, `byteLength`, `snippet`. Lines and columns are 1-based. Offsets are 0-based.
-- `LogicalLocation`: `name`, `fullyQualifiedName`, `kind`, `parentIndex`.
+- `LogicalLocation`: `name`, `index`, `fullyQualifiedName`, `kind`, `decoratedName`, `parentIndex`.
 
 ## Flows, graphs, and fixes
 

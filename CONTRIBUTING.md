@@ -100,6 +100,6 @@ Keep these properties of the library intact:
 
 ## Pull requests
 
-Open a pull request against `main`. CI builds in Release with the AOT and trim analysers, runs the tests, packs the library, and publishes the sample with Native AOT on Linux.
+Open a pull request against `master`. CI builds in Release with the AOT and trim analysers, runs the tests, packs the library, and publishes the sample with Native AOT on Linux.
 
 Keep a pull request focused on one change. Describe what changed and why, and say which commands you ran. A new object, enum, or behaviour change needs a test that would fail without it.

@@ -173,6 +173,12 @@ These members are required and throw `JsonException` when they are absent on rea
 | `ReportingDescriptorRelationship` | `target` |
 | `EdgeTraversal` | `edgeId` |
 
+## Agent skill
+
+[`skills/sarif-kit`](skills/sarif-kit) is a skill any coding agent can load. It describes how to read and write SARIF with this library, and the same files are included in the NuGet package under `skills/sarif-kit`.
+
+Copy that folder into the skills directory your agent reads. For agents that share one project skills folder, that path is `.agents/skills/sarif-kit`.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test, and change the library.

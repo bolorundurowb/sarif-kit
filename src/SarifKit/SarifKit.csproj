@@ -44,6 +44,7 @@
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\..\assets\icon.png" Pack="true" PackagePath="assets" />
+    <None Include="..\..\skills\**\*.md" Pack="true" PackagePath="skills\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>

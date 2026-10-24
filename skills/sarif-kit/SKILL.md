@@ -1,22 +1,23 @@
 ---
 name: sarif-kit
 description: >-
-  Reads and writes SARIF 2.1.0 logs with the SarifKit library. Use when reading
-  or writing .sarif files, constructing SarifLog, SarifRun, Result, or location
-  objects, mapping analysis findings into SARIF, or changing SarifKit's object
-  model, reader, or writer.
+  Reads and writes SARIF 2.1.0 logs with the SarifKit NuGet package. Use when a
+  C# project references SarifKit, or when the task is to read or write .sarif
+  files, construct SarifLog, SarifRun, or Result objects, or map analysis
+  findings into SARIF.
 ---
 
-# Using SarifKit
+# SarifKit
 
-SarifKit is a zero-dependency, Native-AOT-ready C# library for SARIF 2.1.0. It targets `net8.0`, `net9.0`, and `net10.0`. Consuming code uses only `SarifKit.IO` and `SarifKit.Models`. `SarifKit.Serialization` and `SarifKit.Internal` are internal.
+SarifKit is a zero-dependency, Native-AOT-ready C# library for SARIF 2.1.0. It targets `net8.0`, `net9.0`, and `net10.0`. Add it with `dotnet add package SarifKit`.
 
-Read and write through `SarifReader` and `SarifWriter`. Do not call `JsonSerializer` on these types from a consumer. The source-generated context is internal, and a reflection serializer will not round-trip the model correctly under trimming or Native AOT.
+Use `SarifKit.IO` and `SarifKit.Models`. Read and write through `SarifReader` and `SarifWriter`. The source-generated serializer is internal, so a `JsonSerializer` call from consuming code does not round-trip these types correctly under trimming or Native AOT.
 
 ## Read
 
 ```csharp
 using SarifKit.IO;
+using SarifKit.Models;
 
 using var input = File.OpenRead("scan.sarif");
 SarifLog log = SarifReader.Read(input);
@@ -30,11 +31,11 @@ Also available: `SarifReader.Read(string)`, `SarifReader.Read(ReadOnlySpan<byte>
 
 ```csharp
 using var output = File.Create("output.sarif");
-SarifWriter.Write(log, output);                 // indented
+SarifWriter.Write(log, output);                  // indented
 SarifWriter.Write(log, output, indented: false); // compact
 ```
 
-Also available: `WriteToString`, `WriteToUtf8Bytes`, and `WriteAsync`. The writer does not dispose the stream. Null members are omitted. The default `$schema` and `version` (`2.1.0`) are written when left at their defaults.
+Also available: `WriteToString`, `WriteToUtf8Bytes`, and `WriteAsync`. The writer does not dispose the stream. Null members are omitted. The default `$schema` is `https://json.schemastore.org/sarif-2.1.0.json` and the default `version` is `2.1.0`.
 
 ## Build a log
 
@@ -84,7 +85,7 @@ var log = new SarifLog
 };
 ```
 
-`startLine` and `startColumn` follow SARIF and are 1-based. `charOffset` and `byteOffset` are 0-based. The library does not convert between them.
+`startLine` and `startColumn` follow SARIF and are 1-based. `charOffset` and `byteOffset` are 0-based. The library does not convert between them. `SarifLog.Schema` is the `$schema` member.
 
 ## Results that are missing
 
@@ -112,15 +113,27 @@ IReadOnlyDictionary<string, JsonElement> properties = new Dictionary<string, Jso
 };
 ```
 
-Unknown JSON members outside `properties` are ignored on read and are not written back. Put vendor data in `properties` if it must survive a round trip.
+Unknown JSON members outside `properties` are ignored on read and are not written back. Put vendor data in `properties` when it has to survive a round trip.
 
 ## Enumerations
 
-`FailureLevel`, `ResultKind`, `BaselineState`, `ColumnKind`, `SuppressionKind`, `SuppressionStatus`, and `Importance` are written as camelCase strings (`warning`, `utf16CodeUnits`, `inSource`) and read without regard to case. SARIF treats them as closed sets, so an unrecognised value throws `JsonException` on read and on write. Do not add a value the specification does not define.
+These enumerations are written as camelCase strings and read without regard to case. SARIF treats them as closed sets, so an unrecognised value throws `JsonException` on read and on write.
 
-## Required members agents miss
+| Enumeration | JSON values |
+|-------------|-------------|
+| `FailureLevel` | `none`, `note`, `warning`, `error` |
+| `ResultKind` | `notApplicable`, `pass`, `fail`, `open`, `review`, `informational` |
+| `BaselineState` | `new`, `unchanged`, `updated`, `absent` |
+| `ColumnKind` | `utf16CodeUnits`, `unicodeCodePoints` |
+| `SuppressionKind` | `inSource`, `external` |
+| `SuppressionStatus` | `accepted`, `underReview`, `rejected` |
+| `Importance` | `important`, `essential`, `unimportant` |
 
-These members are `required` and throw `JsonException` when absent on read:
+When `columnKind` is absent, SARIF consumers treat columns as UTF-16 code units.
+
+## Required members
+
+These members throw `JsonException` when they are absent on read:
 
 | Type | Required members |
 |------|------------------|
@@ -139,7 +152,8 @@ These members are `required` and throw `JsonException` when absent on read:
 | `ArtifactChange` | `artifactLocation`, `replacements` |
 | `Replacement` | `deletedRegion` |
 | `Attachment` | `artifactLocation` |
-| `MultiformatMessageString`, `TranslationMetadata` | `text` / `name` |
+| `MultiformatMessageString` | `text` |
+| `TranslationMetadata` | `name` |
 | `VersionControlDetails` | `repositoryUri` |
 | `Conversion` | `tool` |
 | `ConfigurationOverride` | `configuration`, `descriptor` |
@@ -147,13 +161,4 @@ These members are `required` and throw `JsonException` when absent on read:
 | `ReportingDescriptorRelationship` | `target` |
 | `EdgeTraversal` | `edgeId` |
 
-For the rest of the object graph, see [reference.md](reference.md).
-
-## Extending the library
-
-When adding a SARIF object in this repository:
-
-- Add a sealed model under `src/SarifKit/Models` with init-only properties, `[JsonPropertyName]` set to the SARIF member name, and a `properties` bag of `IReadOnlyDictionary<string, JsonElement>?`.
-- Register the type with `[JsonSerializable]` on `SarifJsonContext`.
-- Map a closed SARIF enumeration with `[JsonConverter(typeof(SarifStringEnumConverter<T>))]`.
-- Add a round-trip test. Do not add a NuGet dependency. Keep the project trimmable and AOT-compatible.
+For the rest of the object graph, see [references/object-model.md](references/object-model.md).
