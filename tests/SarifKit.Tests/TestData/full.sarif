@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "FullTool",
+          "fullName": "FullTool 2.0.0 (en-GB)",
+          "version": "2.0.0",
+          "semanticVersion": "2.0.0",
+          "dottedQuadFileVersion": "2.0.0.0",
+          "releaseDateUtc": "2026-01-01",
+          "shortDescription": { "text": "A tool." },
+          "fullDescription": { "text": "A tool used to exercise the object model." },
+          "isComprehensive": true,
+          "contents": [ "localizedData", "nonLocalizedData" ],
+          "supportedTaxonomies": [ { "name": "CWE", "index": 0 } ],
+          "rules": [
+            {
+              "id": "FT001",
+              "deprecatedIds": [ "OLD001" ],
+              "deprecatedNames": [ "OldRule" ],
+              "name": "FullRule",
+              "defaultConfiguration": { "enabled": true, "level": "error", "rank": 75.5 }
+            }
+          ]
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "processStartFailureMessage": "none",
+          "executableLocation": { "uri": "file:///bin/tool" },
+          "stdoutStderr": { "uri": "file:///tmp/out.txt" },
+          "ruleConfigurationOverrides": [
+            {
+              "configuration": { "level": "note" },
+              "descriptor": { "id": "FT001", "index": 0 }
+            }
+          ],
+          "toolExecutionNotifications": [
+            {
+              "message": { "text": "Something happened." },
+              "level": "warning",
+              "threadId": 7,
+              "descriptor": { "id": "N001" },
+              "associatedRule": { "id": "FT001" },
+              "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "src/a.cs" } } } ]
+            }
+          ]
+        }
+      ],
+      "conversion": {
+        "tool": { "driver": { "name": "Converter" } },
+        "analysisToolLogFiles": [ { "uri": "native.log" } ]
+      },
+      "versionControlProvenance": [
+        {
+          "repositoryUri": "https://example.com/repo.git",
+          "revisionId": "abc123",
+          "branch": "main",
+          "revisionTag": "v1.0.0",
+          "mappedTo": { "uriBaseId": "SRCROOT" }
+        }
+      ],
+      "originalUriBaseIds": {
+        "SRCROOT": { "uri": "file:///src/" }
+      },
+      "columnKind": "unicodeCodePoints",
+      "redactionTokens": [ "[REDACTED]" ],
+      "specialLocations": { "displayBase": { "uri": "file:///src/" } },
+      "graphs": [
+        {
+          "nodes": [ { "id": "n1", "children": [ { "id": "n2" } ] } ],
+          "edges": [ { "id": "e1", "sourceNodeId": "n1", "targetNodeId": "n2" } ]
+        }
+      ],
+      "webRequests": [ { "index": 0, "method": "GET", "target": "/" } ],
+      "webResponses": [ { "index": 0, "statusCode": 200, "noResponseReceived": false } ],
+      "results": [
+        {
+          "ruleId": "FT001",
+          "ruleIndex": 0,
+          "kind": "fail",
+          "level": "error",
+          "message": { "text": "日本語 🎉" },
+          "correlationGuid": "8f1c3a4e-0000-4000-8000-000000000001",
+          "fingerprints": { "primary/v1": "abc" },
+          "partialFingerprints": { "lineHash/v1": "def" },
+          "rank": 50,
+          "baselineState": "unchanged",
+          "hostedViewerUri": "https://example.com/view/1",
+          "workItemUris": [ "https://example.com/issue/1" ],
+          "provenance": {
+            "invocationIndex": 0,
+            "conversionSources": [ { "artifactLocation": { "uri": "native.log" } } ]
+          },
+          "attachments": [
+            {
+              "artifactLocation": { "uri": "screenshot.png" },
+              "rectangles": [ { "top": 1.5, "left": 2, "bottom": 3, "right": 4 } ]
+            }
+          ],
+          "suppressions": [
+            { "kind": "inSource", "status": "underReview", "justification": "False positive." }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "initialState": { "x": { "text": "0" } },
+                  "locations": [
+                    {
+                      "state": { "x": { "text": "1" } },
+                      "importance": "essential",
+                      "taxa": [ { "id": "CWE-79" } ],
+                      "webRequest": { "method": "POST" }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "graphTraversals": [
+            {
+              "runGraphIndex": 0,
+              "edgeTraversals": [ { "edgeId": "e1", "stepOverEdgeCount": 1 } ]
+            }
+          ],
+          "stacks": [
+            {
+              "frames": [ { "module": "app", "threadId": 1, "parameters": [ "a" ] } ]
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "tags": [ "security" ],
+        "count": 3
+      }
+    }
+  ]
+}
