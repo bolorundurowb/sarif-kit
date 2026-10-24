@@ -72,7 +72,7 @@ dotnet pack src/SarifKit -c Release
 
 The resulting `SarifKit` package has no NuGet dependencies. The repository README is packed as the package readme, so keep that file aimed at people who consume the library.
 
-CI packs on every pull request. A push of a `v*` tag publishes the package to NuGet.
+CI packs on every pull request. A push of a `v*` tag creates a GitHub release and attaches the package.
 
 ## Design constraints
 
