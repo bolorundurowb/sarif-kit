@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "SarifKit.Sample",
+          "version": "1.0.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SAMPLE001",
+          "level": "warning",
+          "message": {
+            "text": "This is a sample result."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "sample.sarif"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

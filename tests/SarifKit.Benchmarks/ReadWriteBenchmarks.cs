@@ -1,7 +1,6 @@
 using System.Text;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using Newtonsoft.Json;
 using SarifKit.IO;
 using Sdk = Microsoft.CodeAnalysis.Sarif;
 
