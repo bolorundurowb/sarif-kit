@@ -38,7 +38,7 @@ jobs:
         run: dotnet build -c Release --no-restore /p:EnableAotAnalyzer=true /p:EnableTrimAnalyzer=true
 
       - name: Test
-        run: dotnet test -c Release --no-build --logger trx --results-directory TestResults
+        run: dotnet test -c Release --no-build --logger trx --results-directory TestResults --collect:"XPlat Code Coverage"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -46,6 +46,16 @@ jobs:
         with:
           name: test-results-${{ matrix.os }}
           path: TestResults
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./TestResults/**/coverage.cobertura.xml
+          flags: unittests
+          name: codecov-${{ matrix.os }}
+          fail_ci_if_error: false
 
   pack:
     name: Pack NuGet
