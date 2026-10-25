@@ -74,7 +74,7 @@ jobs:
             10.0.x
 
       - name: Pack
-        run: dotnet pack src/SarifKit -c Release --output ./artifacts
+        run: dotnet pack src/SarifKit -c Release --output ./artifacts -p:GeneratePackageOnBuild=false
 
       - name: Upload package
         uses: actions/upload-artifact@v4

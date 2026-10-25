@@ -67,8 +67,10 @@ The benchmark compares SarifKit with `Sarif.Sdk` on a synthetic log of more than
 ## Package
 
 ```bash
-dotnet pack src/SarifKit -c Release
+dotnet pack src/SarifKit -c Release -p:GeneratePackageOnBuild=false
 ```
+
+`GeneratePackageOnBuild` is set so a normal build also produces a package. `dotnet pack` skips its own build while that property is true, so a clean pack fails with NU5026. Pass `-p:GeneratePackageOnBuild=false` so pack builds every target framework and then creates the package.
 
 The resulting `SarifKit` package has no NuGet dependencies. The repository README is packed as the package readme, so keep that file aimed at people who consume the library.
 
