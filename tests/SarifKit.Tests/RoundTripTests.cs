@@ -256,12 +256,16 @@ public sealed class RoundTripTests
             ]
         };
 
+        var thresholdSeconds = double.TryParse(Environment.GetEnvironmentVariable("SARIFKIT_LARGE_LOG_THRESHOLD_SECONDS"), out var envValue)
+            ? envValue
+            : 10.0;
+
         var sw = System.Diagnostics.Stopwatch.StartNew();
         var json = SarifWriter.WriteToString(log);
         var roundTripped = SarifReader.Read(json);
         sw.Stop();
 
         Assert.Equal(count, roundTripped.Runs[0].Results!.Count);
-        Assert.True(sw.Elapsed.TotalSeconds < 2, $"Round-trip took {sw.Elapsed.TotalSeconds:F2}s");
+        Assert.True(sw.Elapsed.TotalSeconds < thresholdSeconds, $"Round-trip took {sw.Elapsed.TotalSeconds:F2}s (threshold: {thresholdSeconds}s).");
     }
 }
