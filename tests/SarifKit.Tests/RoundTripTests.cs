@@ -128,6 +128,19 @@ public sealed class RoundTripTests
     }
 
     [Fact]
+    public void RoundTrip_Utf8BytesApi_MatchesString()
+    {
+        var original = MakeLog();
+
+        var bytes = SarifWriter.WriteToUtf8Bytes(original);
+        var fromBytes = SarifReader.Read(bytes.AsSpan());
+
+        Assert.Equal(SarifWriter.WriteToString(original), Encoding.UTF8.GetString(bytes));
+        Assert.Equal(original.Version, fromBytes.Version);
+        Assert.Single(fromBytes.Runs);
+    }
+
+    [Fact]
     public void RoundTrip_EmptyRuns()
     {
         var log = new SarifLog { Version = "2.1.0", Runs = [] };

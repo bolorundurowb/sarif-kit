@@ -22,7 +22,18 @@
               "deprecatedIds": [ "OLD001" ],
               "deprecatedNames": [ "OldRule" ],
               "name": "FullRule",
-              "defaultConfiguration": { "enabled": true, "level": "error", "rank": 75.5 }
+              "defaultConfiguration": { "enabled": true, "level": "error", "rank": 75.5 },
+              "relationships": [
+                {
+                  "target": { "id": "FT002", "index": 1, "toolComponent": { "name": "FullTool" } },
+                  "kinds": [ "superset" ],
+                  "description": { "text": "Supersedes the deprecated rule." }
+                }
+              ]
+            },
+            {
+              "id": "FT002",
+              "name": "SupersededRule"
             }
           ]
         }
@@ -46,7 +57,18 @@
               "threadId": 7,
               "descriptor": { "id": "N001" },
               "associatedRule": { "id": "FT001" },
-              "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "src/a.cs" } } } ]
+              "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "src/a.cs" } } } ],
+              "exception": {
+                "kind": "System.NullReferenceException",
+                "message": "Object reference not set to an instance of an object.",
+                "stack": {
+                  "frames": [ { "module": "app", "threadId": 1 } ]
+                },
+                "innerExceptions": [
+                  { "kind": "System.Exception", "message": "The inner exception." }
+                ],
+                "properties": { "handled": false }
+              }
             }
           ]
         }
@@ -66,6 +88,103 @@
       ],
       "originalUriBaseIds": {
         "SRCROOT": { "uri": "file:///src/" }
+      },
+      "automationDetails": {
+        "description": { "text": "Main CI run." },
+        "id": "ci/run/1",
+        "guid": "8f1c3a4e-0000-4000-8000-000000000020",
+        "correlationGuid": "8f1c3a4e-0000-4000-8000-000000000021",
+        "properties": { "pipeline": "ci" }
+      },
+      "runAggregations": [
+        {
+          "description": { "text": "Aggregate across all tool runs." },
+          "id": "ci/aggregate",
+          "guid": "8f1c3a4e-0000-4000-8000-000000000022"
+        }
+      ],
+      "artifacts": [
+        {
+          "description": { "text": "Primary source file." },
+          "location": { "uri": "src/a.cs" },
+          "parentIndex": 0,
+          "offset": 10,
+          "length": 512,
+          "roles": [ "analysisTarget" ],
+          "mimeType": "text/x-csharp",
+          "contents": {
+            "text": "class A {}",
+            "rendered": { "text": "class A {}" }
+          },
+          "encoding": "utf-8",
+          "sourceLanguage": "csharp",
+          "hashes": { "sha-256": "abc123" },
+          "lastModifiedTimeUtc": "2026-01-01T00:00:00+00:00",
+          "properties": { "generated": false }
+        },
+        {
+          "location": { "uri": "assets/icon.ico" },
+          "contents": { "binary": "AAECAw==" },
+          "mimeType": "image/x-icon"
+        }
+      ],
+      "logicalLocations": [
+        {
+          "name": "A",
+          "index": 0,
+          "fullyQualifiedName": "Namespace.A",
+          "kind": "type",
+          "decoratedName": "?A@@",
+          "parentIndex": 0,
+          "properties": { "visibility": "public" }
+        }
+      ],
+      "addresses": [
+        {
+          "absoluteAddress": 4096,
+          "relativeAddress": 16,
+          "length": 32,
+          "parentIndex": 0,
+          "kind": "function",
+          "name": "main",
+          "fullyQualifiedName": "main",
+          "offsetFromParent": 8,
+          "index": 0,
+          "properties": { "module": "app" }
+        }
+      ],
+      "translations": [
+        {
+          "name": "FullTool",
+          "translationMetadata": {
+            "name": "FullTool (fr-FR)",
+            "fullName": "FullTool 2.0.0 (fr-FR)",
+            "shortDescription": { "text": "Un outil." },
+            "fullDescription": { "text": "Un outil utilise pour exercer le modele objet." },
+            "downloadUri": "https://example.com/download",
+            "informationUri": "https://example.com/info",
+            "properties": { "locale": "fr-FR" }
+          }
+        }
+      ],
+      "externalPropertyFileReferences": {
+        "conversion": { "location": { "uri": "ext/conversion.json" }, "guid": "8f1c3a4e-0000-4000-8000-000000000010", "itemCount": 1 },
+        "graphs": [ { "location": { "uri": "ext/graphs.json" }, "itemCount": 1 } ],
+        "externalizedProperties": { "location": { "uri": "ext/properties.json" } },
+        "artifacts": [ { "location": { "uri": "ext/artifacts.json" } } ],
+        "invocations": [ { "location": { "uri": "ext/invocations.json" } } ],
+        "logicalLocations": [ { "location": { "uri": "ext/logicalLocations.json" } } ],
+        "threadFlowLocations": [ { "location": { "uri": "ext/threadFlowLocations.json" } } ],
+        "results": [ { "location": { "uri": "ext/results.json" } } ],
+        "taxonomies": [ { "location": { "uri": "ext/taxonomies.json" } } ],
+        "addresses": [ { "location": { "uri": "ext/addresses.json" } } ],
+        "driver": { "location": { "uri": "ext/driver.json" } },
+        "extensions": [ { "location": { "uri": "ext/extensions.json" } } ],
+        "policies": [ { "location": { "uri": "ext/policies.json" } } ],
+        "translations": [ { "location": { "uri": "ext/translations.json" } } ],
+        "webRequests": [ { "location": { "uri": "ext/webRequests.json" } } ],
+        "webResponses": [ { "location": { "uri": "ext/webResponses.json" } } ],
+        "properties": { "note": "external" }
       },
       "columnKind": "unicodeCodePoints",
       "redactionTokens": [ "[REDACTED]" ],
@@ -132,6 +251,48 @@
             {
               "frames": [ { "module": "app", "threadId": 1, "parameters": [ "a" ] } ]
             }
+          ],
+          "locations": [
+            {
+              "id": 1,
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/a.cs" },
+                "region": { "startLine": 10, "startColumn": 5 },
+                "address": { "absoluteAddress": 4096, "name": "main" }
+              },
+              "relationships": [
+                {
+                  "target": 2,
+                  "kinds": [ "relevant" ],
+                  "description": { "text": "Related to the result." }
+                }
+              ]
+            }
+          ],
+          "relatedLocations": [
+            {
+              "id": 2,
+              "physicalLocation": { "artifactLocation": { "uri": "src/b.cs" } }
+            }
+          ],
+          "fixes": [
+            {
+              "description": { "text": "Rename the field." },
+              "artifactChanges": [
+                {
+                  "artifactLocation": { "uri": "src/a.cs" },
+                  "replacements": [
+                    {
+                      "deletedRegion": { "startLine": 10, "startColumn": 5, "endColumn": 8 },
+                      "insertedContent": { "text": "newName" },
+                      "properties": { "confidence": "high" }
+                    }
+                  ],
+                  "properties": { "automatic": true }
+                }
+              ],
+              "properties": { "rank": 1 }
+            }
           ]
         }
       ],
@@ -139,6 +300,31 @@
         "tags": [ "security" ],
         "count": 3
       }
+    }
+  ],
+  "inlineExternalProperties": [
+    {
+      "version": "2.1.0",
+      "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+      "guid": "8f1c3a4e-0000-4000-8000-000000000030",
+      "runGuid": "8f1c3a4e-0000-4000-8000-000000000031",
+      "conversion": { "tool": { "driver": { "name": "ExtConverter" } } },
+      "graphs": [ { "nodes": [ { "id": "n1" } ] } ],
+      "externalizedProperties": { "note": "externalized" },
+      "artifacts": [ { "location": { "uri": "ext/a.cs" } } ],
+      "invocations": [ { "executionSuccessful": true } ],
+      "logicalLocations": [ { "name": "Ext" } ],
+      "threadFlowLocations": [ { "importance": "unimportant" } ],
+      "results": [ { "message": { "text": "ext result" } } ],
+      "taxonomies": [ { "name": "ExtTaxonomy" } ],
+      "addresses": [ { "absoluteAddress": 0 } ],
+      "driver": { "name": "ExtDriver" },
+      "extensions": [ { "name": "ExtExtension" } ],
+      "policies": [ { "name": "ExtPolicy" } ],
+      "translations": [ { "name": "ExtTranslation" } ],
+      "webRequests": [ { "method": "GET" } ],
+      "webResponses": [ { "statusCode": 200 } ],
+      "properties": { "source": "inline" }
     }
   ]
 }
