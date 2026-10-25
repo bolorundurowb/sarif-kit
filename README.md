@@ -1,6 +1,6 @@
 # SarifKit
 
-[![CI](https://github.com/bolorundurowb/sarif-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/bolorundurowb/sarif-kit/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/bolorundurowb/sarif-kit/graph/badge.svg?token=ypHiwnKOif)](https://codecov.io/gh/bolorundurowb/sarif-kit)
+[![CI](https://github.com/bolorundurowb/sarif-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/bolorundurowb/sarif-kit/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/bolorundurowb/sarif-kit/graph/badge.svg?token=ypHiwnKOif)](https://codecov.io/gh/bolorundurowb/sarif-kit) [![NuGet](https://img.shields.io/nuget/v/SarifKit.svg)](https://www.nuget.org/packages/SarifKit/)
 
 SarifKit is a zero-dependency, Native-AOT-ready C# library for reading and writing [SARIF 2.1.0](https://docs.oasis-open.org/sarif/sarif/v2.1.0/) logs. It targets `net8.0`, `net9.0`, and `net10.0`, and serialises with the in-box `System.Text.Json` source generator, so it stays compatible with trimming and Native AOT.
 
